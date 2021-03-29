@@ -1,0 +1,7 @@
+[book]
+authors = ["Nalleyer"]
+description = "rtr4的个人渣翻版。内含各种长懒翻。"
+language = "zh"
+multilingual = false
+src = "src"
+title = "实时渲染第4版"
