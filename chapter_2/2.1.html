@@ -1,0 +1,253 @@
+<!DOCTYPE HTML>
+<html lang="zh" class="sidebar-visible no-js light">
+    <head>
+        <!-- Book generated using mdBook -->
+        <meta charset="UTF-8">
+        <title>架构 - 实时渲染第4版</title>
+        
+        
+
+
+        <!-- Custom HTML head -->
+        
+
+
+        <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+        <meta name="description" content="rtr4的个人渣翻版。内含各种长懒翻。">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="theme-color" content="#ffffff" />
+
+        
+        <link rel="icon" href="../favicon.svg">
+        
+        
+        <link rel="shortcut icon" href="../favicon.png">
+        
+        <link rel="stylesheet" href="../css/variables.css">
+        <link rel="stylesheet" href="../css/general.css">
+        <link rel="stylesheet" href="../css/chrome.css">
+        
+        <link rel="stylesheet" href="../css/print.css" media="print">
+        
+
+        <!-- Fonts -->
+        <link rel="stylesheet" href="../FontAwesome/css/font-awesome.css">
+        
+        <link rel="stylesheet" href="../fonts/fonts.css">
+        
+
+        <!-- Highlight.js Stylesheets -->
+        <link rel="stylesheet" href="../highlight.css">
+        <link rel="stylesheet" href="../tomorrow-night.css">
+        <link rel="stylesheet" href="../ayu-highlight.css">
+
+        <!-- Custom theme stylesheets -->
+        
+
+        
+    </head>
+    <body>
+        <!-- Provide site root to javascript -->
+        <script type="text/javascript">
+            var path_to_root = "../";
+            var default_theme = window.matchMedia("(prefers-color-scheme: dark)").matches ? "navy" : "light";
+        </script>
+
+        <!-- Work around some values being stored in localStorage wrapped in quotes -->
+        <script type="text/javascript">
+            try {
+                var theme = localStorage.getItem('mdbook-theme');
+                var sidebar = localStorage.getItem('mdbook-sidebar');
+
+                if (theme.startsWith('"') && theme.endsWith('"')) {
+                    localStorage.setItem('mdbook-theme', theme.slice(1, theme.length - 1));
+                }
+
+                if (sidebar.startsWith('"') && sidebar.endsWith('"')) {
+                    localStorage.setItem('mdbook-sidebar', sidebar.slice(1, sidebar.length - 1));
+                }
+            } catch (e) { }
+        </script>
+
+        <!-- Set the theme before any content is loaded, prevents flash -->
+        <script type="text/javascript">
+            var theme;
+            try { theme = localStorage.getItem('mdbook-theme'); } catch(e) { }
+            if (theme === null || theme === undefined) { theme = default_theme; }
+            var html = document.querySelector('html');
+            html.classList.remove('no-js')
+            html.classList.remove('light')
+            html.classList.add(theme);
+            html.classList.add('js');
+        </script>
+
+        <!-- Hide / unhide sidebar before it is displayed -->
+        <script type="text/javascript">
+            var html = document.querySelector('html');
+            var sidebar = 'hidden';
+            if (document.body.clientWidth >= 1080) {
+                try { sidebar = localStorage.getItem('mdbook-sidebar'); } catch(e) { }
+                sidebar = sidebar || 'visible';
+            }
+            html.classList.remove('sidebar-visible');
+            html.classList.add("sidebar-" + sidebar);
+        </script>
+
+        <nav id="sidebar" class="sidebar" aria-label="Table of contents">
+            <div class="sidebar-scrollbox">
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="../chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="../chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/2.1.html" class="active"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
+            </div>
+            <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
+        </nav>
+
+        <div id="page-wrapper" class="page-wrapper">
+
+            <div class="page">
+                
+                <div id="menu-bar-hover-placeholder"></div>
+                <div id="menu-bar" class="menu-bar sticky bordered">
+                    <div class="left-buttons">
+                        <button id="sidebar-toggle" class="icon-button" type="button" title="Toggle Table of Contents" aria-label="Toggle Table of Contents" aria-controls="sidebar">
+                            <i class="fa fa-bars"></i>
+                        </button>
+                        <button id="theme-toggle" class="icon-button" type="button" title="Change theme" aria-label="Change theme" aria-haspopup="true" aria-expanded="false" aria-controls="theme-list">
+                            <i class="fa fa-paint-brush"></i>
+                        </button>
+                        <ul id="theme-list" class="theme-popup" aria-label="Themes" role="menu">
+                            <li role="none"><button role="menuitem" class="theme" id="light">Light (default)</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="rust">Rust</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="coal">Coal</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="navy">Navy</button></li>
+                            <li role="none"><button role="menuitem" class="theme" id="ayu">Ayu</button></li>
+                        </ul>
+                        
+                        <button id="search-toggle" class="icon-button" type="button" title="Search. (Shortkey: s)" aria-label="Toggle Searchbar" aria-expanded="false" aria-keyshortcuts="S" aria-controls="searchbar">
+                            <i class="fa fa-search"></i>
+                        </button>
+                        
+                    </div>
+
+                    <h1 class="menu-title">实时渲染第4版</h1>
+
+                    <div class="right-buttons">
+                        
+                        <a href="../print.html" title="Print this book" aria-label="Print this book">
+                            <i id="print-button" class="fa fa-print"></i>
+                        </a>
+                        
+                        
+                    </div>
+                </div>
+
+                
+                <div id="search-wrapper" class="hidden">
+                    <form id="searchbar-outer" class="searchbar-outer">
+                        <input type="search" name="search" id="searchbar" name="searchbar" placeholder="Search this book ..." aria-controls="searchresults-outer" aria-describedby="searchresults-header">
+                    </form>
+                    <div id="searchresults-outer" class="searchresults-outer hidden">
+                        <div id="searchresults-header" class="searchresults-header"></div>
+                        <ul id="searchresults">
+                        </ul>
+                    </div>
+                </div>
+                
+
+                <!-- Apply ARIA attributes after the sidebar and the sidebar toggle button are added to the DOM -->
+                <script type="text/javascript">
+                    document.getElementById('sidebar-toggle').setAttribute('aria-expanded', sidebar === 'visible');
+                    document.getElementById('sidebar').setAttribute('aria-hidden', sidebar !== 'visible');
+                    Array.from(document.querySelectorAll('#sidebar a')).forEach(function(link) {
+                        link.setAttribute('tabIndex', sidebar === 'visible' ? 0 : -1);
+                    });
+                </script>
+
+                <div id="content" class="content">
+                    <main>
+                        <h2 id="21-架构"><a class="header" href="#21-架构">2.1 架构</a></h2>
+<p>现实世界中流水线有多个含义，我们渲染里也取这个词来用，表示流水线分成多个阶段，每个阶段代表一个比较独立的大任务。</p>
+<p>流水线的每级是并行的，其输入依赖前一级的输出。理想情况下，n级的流水线效率提升应当是没有流水化的n倍。这是我们采用流水线的主要原因。例略。
+流水线会因为最慢的一级没有完成任务而停机。我们把这一级叫做流水线的<em>瓶颈</em>，后面的级就处于<em>饥饿</em>状态。</p>
+<p>实时渲染流水线可以粗略分成4个阶段：应用程序，几何处理，光栅化，像素处理。见图2.2。这个图很重要，它是后面的章节的重要的基础。通常每个阶段自己都是一条流水线，也就是说每个阶段包含了若干的子阶段。
+我们此处需要区分功能上的阶段和实现上的阶段。功能上每个阶段有特定的事情要做，但是不指明具体怎么实现的。实际的实现其实可能会把多个阶段结合到一个计算单元里面去，也可能把一个费时间的计算过程拆分到不同的硬件单元去。</p>
+<blockquote>
+<p>图2.2
+前略。每个阶段可以自己又是一个流水线，例如几何处理阶段；也可以是一个并行处理的阶段，例如像素处理阶段。图中的应用程序阶段是表示成了一个单独的阶段，但这个阶段也可以被流水化或者并行化。
+注意光栅化阶段找到了一个图元或者说三角形里内部的的这些像素。</p>
+</blockquote>
+<p>渲染的速度使用<em>每秒的帧数</em>（fps）来表征，也就是每秒能渲染出多少张图片。也可以用<em>赫兹</em>（Hz）作为单位。使用渲染一张图片需要多少毫秒来表征速度的方法也很常见。
+渲染一帧所需的时间根据实际情况会有很大差别。fps可以表征特定帧的生成速度，也可以表征平均的性能。赫兹用于硬件，是设置为定值的。</p>
+<p>如其名，应用阶段是被应用驱动的，通常情况是在cpu上实现。cpu通常是多核的，具有并行处理的能力。因此适合处理应用阶段的各种各样的任务。常见的这样的任务有：碰撞检测，一些全局的加速优化（原文<code>global acceleration algorithms</code>），动画，物理模拟，等等。</p>
+<p>下一个主要阶段是几何处理，负责坐标变换，投影，所有的几何上的处理。此阶段决定什么东西要被画，怎么画，画在哪。此阶段在gpu上执行，包含很多可编程的计算核和一些做死的计算硬件。</p>
+<p>光栅化阶段把输入的3个顶点，组成三角形，然后找到内部的像素，然后把他们喂给下一个阶段。</p>
+<p>最后像素阶段对每个像素执行一个程序，决定其颜色，或再根据深度测试决定是否像素可见。此阶段也可以执行其他逐像素操作，如根据前一个像素的颜色和新计算的像素的颜色混合出最终的颜色。
+光栅化阶段和像素阶段都完全在gpu上执行。</p>
+<p>接下来4个部分讨论所有这些阶段。更多细节见<a href="../chapter_3/chapter_3.html">图形处理单元</a></p>
+
+                    </main>
+
+                    <nav class="nav-wrapper" aria-label="Page navigation">
+                        <!-- Mobile navigation buttons -->
+                        
+                            <a rel="prev" href="../chapter_2/chapter_2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                                <i class="fa fa-angle-left"></i>
+                            </a>
+                        
+
+                        
+                            <a rel="next" href="../chapter_2/2.2.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        
+
+                        <div style="clear: both"></div>
+                    </nav>
+                </div>
+            </div>
+
+            <nav class="nav-wide-wrapper" aria-label="Page navigation">
+                
+                    <a rel="prev" href="../chapter_2/chapter_2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                        <i class="fa fa-angle-left"></i>
+                    </a>
+                
+
+                
+                    <a rel="next" href="../chapter_2/2.2.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
+                
+            </nav>
+
+        </div>
+
+        
+
+        
+
+        
+
+        
+        <script type="text/javascript">
+            window.playground_copyable = true;
+        </script>
+        
+
+        
+
+        
+        <script src="../elasticlunr.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../mark.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../searcher.js" type="text/javascript" charset="utf-8"></script>
+        
+
+        <script src="../clipboard.min.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../highlight.js" type="text/javascript" charset="utf-8"></script>
+        <script src="../book.js" type="text/javascript" charset="utf-8"></script>
+
+        <!-- Custom JS scripts -->
+        
+
+        
+
+    </body>
+</html>
