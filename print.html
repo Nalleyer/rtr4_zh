@@ -97,7 +97,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li></ol></li><li class="chapter-item expanded "><a href="chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="chapter_2/2.3.html"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li></ol></li><li class="chapter-item expanded "><a href="chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -203,6 +203,13 @@
 光栅化阶段和像素阶段都完全在gpu上执行。</p>
 <p>接下来4个部分讨论所有这些阶段。更多细节见<a href="chapter_2/../chapter_3/chapter_3.html">图形处理单元</a></p>
 <h2 id="22-应用程序阶段"><a class="header" href="#22-应用程序阶段">2.2 应用程序阶段</a></h2>
+<p>因为大多是cpu计算，所以开发者决定这个阶段该干嘛，怎么实现，怎么优化。但是有时候这个阶段还是能影响后面的阶段的。例如，某应用程序阶段的算法决定哪些三角形需要拿来渲染。</p>
+<p>但是有的应用阶段也可以用gpu来运算。因为gpu有<em>compute shader</em>，用它可以把gpu当作通用并行计算核来使用，无视其图形渲染的功能。</p>
+<p>此阶段最后，需要把需要绘制的几何传给下一阶段。这些东西被我们称作<em>渲染图元</em>。包括点，线，三角形，或者说所有可能被画到屏幕上的玩意儿。这个工作是应用程序阶段的最重要的任务。</p>
+<p>因为这个阶段通常是cpu计算，它就不像其他阶段一样可以拆分为子阶段。不过为了提高性能，此阶段通常在多个核上并行处理。cpu中还有超标量结构，可以支持同时执行多个操作。<a href="chapter_2/TODO">18.5</a>会介绍一些多核计算的实现方法。</p>
+<p>此阶段常见的一个工作是<em>碰撞检测</em>。可在检测到两个物体有碰撞后，产生响应并返回给碰撞物体，或者传递给力反馈设备（译注：手柄？）。</p>
+<p>此阶段还负责处理外部设备的输入，如键盘，鼠标，头戴式显示设备等；根据输入可以进行若干处理。一些加速算法也在这个阶段发生，例如典型的剔除算法。此阶段还有包括后面的渲染流程无法做的其他所有事情。</p>
+<h2 id="23-几何阶段"><a class="header" href="#23-几何阶段">2.3 几何阶段</a></h2>
 <h1 id="图形处理单元"><a class="header" href="#图形处理单元">图形处理单元</a></h1>
 
                     </main>

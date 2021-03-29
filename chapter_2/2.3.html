@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>渲染流水线 - 实时渲染第4版</title>
+        <title>几何阶段 - 实时渲染第4版</title>
         
         
 
@@ -95,7 +95,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="../chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="../chapter_2/chapter_2.html" class="active"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.3.html"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="../chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="../chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.3.html" class="active"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -163,33 +163,20 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="渲染流水线"><a class="header" href="#渲染流水线">渲染流水线</a></h1>
-<blockquote>
-<p>链条最薄弱的地方是链接处 —— 佚名</p>
-</blockquote>
-<p>本章介绍实时渲染的核心内容，所谓<em>渲染流水线</em>，或所谓“<em>管线</em>”。渲染流水线的主要功能是，从给定的虚拟相机，三维物件，光源等，生成或者说“<em>渲染</em>”出一张二维的图片。</p>
-<p>流水线就是实时渲染的底层机制了。此流程可见图2.1（本书不插图，请见原书，下同）。
-渲染结果图中的物体位置由以下因素决定：所有物件的几何形状，环境特征，相机的位置。
-结果图中物体的外观特征由以下因素决定：材质，光源，贴图，以及着色器程。</p>
-<blockquote>
-<p>图2.1注：
-左侧可见虚拟相机在金字塔的尖端处（4条线汇集处）。只有可见范围内的物件会被渲染。在透视相机（这个图里就是这种）的渲染中，可见范围是一个<em>平头锥体</em>。</p>
-<p>右图是相机所“见”的效果。注意左边的红色甜甜圈没被渲染出来，因为它在可见范围外。以及蓝色的那个玩意儿，被裁剪了一部分。</p>
-</blockquote>
-<p>之后的内容我们逐个阶段进行介绍，但是着重于功能而不是实现，实现后面的章节会讲</p>
+                        <h2 id="23-几何阶段"><a class="header" href="#23-几何阶段">2.3 几何阶段</a></h2>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../chapter_1.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../chapter_2/2.2.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
                         
-                            <a rel="next" href="../chapter_2/2.1.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                            <a rel="next" href="../chapter_3/chapter_3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                                 <i class="fa fa-angle-right"></i>
                             </a>
                         
@@ -201,13 +188,13 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="../chapter_1.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../chapter_2/2.2.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
                 
-                    <a rel="next" href="../chapter_2/2.1.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                    <a rel="next" href="../chapter_3/chapter_3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
                         <i class="fa fa-angle-right"></i>
                     </a>
                 
