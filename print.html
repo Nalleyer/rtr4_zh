@@ -100,7 +100,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="chapter_2/2.3.html"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li></ol></li><li class="chapter-item expanded "><a href="chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="chapter_2/2.3.html"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li><li class="chapter-item expanded "><a href="chapter_2/2.4.html"><strong aria-hidden="true">2.4.</strong> 光栅化</a></li></ol></li><li class="chapter-item expanded "><a href="chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -259,6 +259,16 @@
 \[ c = d + 0.5 \]</p>
 <p>d是像素的编号（整形），c是像素内连续的位置（浮点）。</p>
 <p>所有api的水平坐标都是从左往右增长的，但是上下方向不同api有不同。opengl使用笛卡尔坐标，左下角的坐标是最小的。dx优势把左上定义为坐标最小的。比如<code>(0, 0)</code>在opengl里是图片的左下角，在dx里是左上角。程序更换api的时候这个区分要特殊注意。</p>
+<h2 id="光栅化阶段"><a class="header" href="#光栅化阶段">光栅化阶段</a></h2>
+<p>给定顶点和其关联的着色数据，下一个阶段的目标是找到要渲染的所有图元中的像素（组成图片的元素）。这个阶段叫做光栅化，功能上可分为两个步骤：三角形建立，三角形遍历。见图2.8。
+注意它也能处理点和线的图元，只是因为三角形是最常见的，所以命名上就叫三角形了。
+光栅化，又叫<strong>扫描转换</strong>，是把屏幕空间中2维的顶点转换成屏幕上的像素。光栅化也可以理解为几合处理和像素处理的同步点（译注：为什么是这个词，想表达“桥梁”吗？），因为这里是把3个顶点表示的三角形变成像素的地方。</p>
+<p>三角形是否被判别为覆盖了一个像素取决于程序员如何设置gpu管线。比如你可以用点采样的方式来决定“内部”是什么。最简单的方法就是用一个像素中间的点是否在三角形内来定义这个像素是不是在三角形内。你也可以用超过一的采样点，使用超采样或者多次采样反走样技术（<a href="chapter_2/">5.4.2</a>)。另一种方法是使用保守的光栅化，这种方法需要像素的一定范围与三角形重叠，才认为这个像素在三角形里（<a href="chapter_2/">23.1.2</a>）。</p>
+<h3 id="241-三角形建立"><a class="header" href="#241-三角形建立">2.4.1 三角形建立</a></h3>
+<p>这个阶段会计算三角形的微分（？），边方程（？）和其他数据。这些数据用来做三角形遍历（<a href="chapter_2/2.4.html###2.4.2">2.4.2</a>），同时后面的阶段里顶点上的各种由几何阶段产生的数据会插值到像素。
+本阶段是硬件固定功能实现的。</p>
+<h3 id="242-三角形建立"><a class="header" href="#242-三角形建立">2.4.2 三角形建立</a></h3>
+<p>本阶段实际决定每个像素是不是被三角形覆盖，以及产生对应的<strong>片段</strong>。更多惊细的采样方法可以见<a href="chapter_2/">5.4</a>。决定采样或像素是否在三角形内的过程就叫做<strong>三角形遍历</strong>。每个片段的属性都从3个顶点插值获得（<a href="chapter_2/">c5</a>）。这些属性包括片段的深度，任何从几何阶段生成的着色数据。McCormack等人在<a href="chapter_2/">1146</a>中提供了本阶段的详细信息。透视正确的插值也是在这个阶段进行的<a href="chapter_2/">694</a>（<a href="chapter_2/">23.1.1</a>）。所有图元内的像素或采样都进入之后的像素处理阶段。下一节介绍。</p>
 <h1 id="图形处理单元"><a class="header" href="#图形处理单元">图形处理单元</a></h1>
 
                     </main>
