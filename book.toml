@@ -5,3 +5,5 @@ language = "zh"
 multilingual = false
 src = "src"
 title = "实时渲染第4版"
+[output.html]
+mathjax-support = true
