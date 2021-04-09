@@ -6,4 +6,5 @@
     - [应用程序阶段](./chapter_2/2.2.md)
     - [几何阶段](./chapter_2/2.3.md)
     - [光栅化](./chapter_2/2.4.md)
+    - [像素处理](./chapter_2/2.5.md)
 - [图形处理单元](./chapter_3/chapter_3.md)
