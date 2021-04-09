@@ -98,7 +98,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="../chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="../chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.3.html" class="active"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.4.html"><strong aria-hidden="true">2.4.</strong> 光栅化</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="../chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="../chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.3.html" class="active"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.4.html"><strong aria-hidden="true">2.4.</strong> 光栅化</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.5.html"><strong aria-hidden="true">2.5.</strong> 像素处理</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -191,7 +191,7 @@
 <p>注意投影也是用矩阵表示的（<a href="">4.7</a>），因此它可以跟其他的几何变换先结合运算。</p>
 <p>正交投影的观察体积是个长方体，正交投影变换把它变换成单位立方体。正交投影的特征是平行线变换后还是平行线。这个变换就是个位移和缩放的组合。</p>
 <p>透视投影稍复杂。投影后有近大远小的效果。平行线在视平线处出现灭点。这模仿了人眼感知事物的方式。透视投影的观察体积是平截头体，它也是被变换到单位立方体。两种透视变换都可以用4x4矩阵表示（见<a href="">c4</a>）。变换完后模型就在<em>裁剪坐标系</em>里。它是个齐次坐标系，也是<a href="">c4</a>会介绍。这一步发生在除以w之前，为了后续功能步骤和裁剪能正常工作，顶点着色器的输出必须是这个类型的（译注：vec4）。</p>
-<p>虽然这些变换是把体积变成另一个体积，但是因为后面z轴信息不是存储在图片里，而是在一个叫z-buffer的地方，所以模型还是从3维投影成了2维。z-buffer在<a href="">2.5</a>中介绍。</p>
+<p>虽然这些变换是把体积变成另一个体积，但是因为后面z轴信息不是存储在图片里，而是在一个叫z缓冲的地方，所以模型还是从3维投影成了2维。z缓冲在<a href="./2.5.html">2.5</a>中介绍。</p>
 <h3 id="232"><a class="header" href="#232">2.3.2</a></h3>
 <p>每个流水线都得有上述的顶点处理功能。上述步骤完成后，gpu上还有一些其他功能可选。细分曲面，几何着色，流输出。是否使用他们取决于硬件是否支持，以及程序员是否想用。通常这些功能是不用的。详见<a href="">c3</a>。</p>
 <p>第一个可选阶段是细分曲面。假设你要画一个球，你会用一些三角形面来表示它。但是马上就会陷入性能和效果的两难之中。如果面数太少，球在近处看就很糙，如果面数很多，性能就受不了。使用细分曲面功能可以对区面生成合适数量的面。</p>
@@ -204,9 +204,9 @@
 <h3 id="233-裁剪"><a class="header" href="#233-裁剪">2.3.3 裁剪</a></h3>
 <p>只有全部或部分在观察体积内的图元会传给光栅化阶段，然后画到屏幕上。完全在外面的图元就被丢弃了。需要被裁剪的是部分在里面的图元。例如一根线有个顶点在外面，就应该裁剪一下，外面的点被丢弃，线段与体积边界的交点会成为这个线段的新顶点。之前的投影步骤等使得裁剪永远在单位立方体上面执行，使裁剪问题变成一个固定的问题。</p>
 <p>裁剪可见图2.6的示意。此外，除了使用这6个面来裁剪之外，用户也可以自定义平面来显式地分割物体，这种操作叫做切片，见图19.1，第818页。</p>
-<p>裁剪使用投影阶段产生的4维的齐次坐标系。在透视空间里裁剪的位置计算不能用简单的线性插值，第4个维度就是为了解决这个问题而存在的。最后会执行<strong>透视除法</strong>，把结果的三角形位置转换到3维<strong>归一化的设备坐标系</strong>。之前提到过，观察体积的范围是<code>(-1, -1, -1)</code>到<code>(1, 1, 1)</code>。最后一步会把这个范围转换到窗口坐标里。</p>
+<p>裁剪使用投影阶段产生的4维的齐次坐标系。在透视空间里裁剪的位置计算不能用简单的线性插值，第4个维度就是为了解决这个问题而存在的。最后会执行<em>透视除法</em>，把结果的三角形位置转换到3维<em>归一化的设备坐标系</em>。之前提到过，观察体积的范围是<code>(-1, -1, -1)</code>到<code>(1, 1, 1)</code>。最后一步会把这个范围转换到窗口坐标里。</p>
 <h3 id="234-屏幕映射"><a class="header" href="#234-屏幕映射">2.3.4 屏幕映射</a></h3>
-<p>只有观察体积内的图元进入此阶段，此时坐标还是3维的。x和y坐标被转换成<strong>屏幕坐标</strong>。带z坐标的屏幕坐标也被称作<strong>窗口坐标</strong>。假设场景会被渲染到屏幕上从<code>(x1, y1)</code>到<code>(x2, y2)</code>的范围内。那么屏幕映射就是平移加缩放操作的组合。新的x和y就是屏幕坐标，z也被映射到某个范围<code>[z1, z2]</code>。默认z1是0，z2是1。不同api可能不同。之后窗口坐标传入光栅化阶段。
+<p>只有观察体积内的图元进入此阶段，此时坐标还是3维的。x和y坐标被转换成<em>屏幕坐标</em>。带z坐标的屏幕坐标也被称作<em>窗口坐标</em>。假设场景会被渲染到屏幕上从<code>(x1, y1)</code>到<code>(x2, y2)</code>的范围内。那么屏幕映射就是平移加缩放操作的组合。新的x和y就是屏幕坐标，z也被映射到某个范围<code>[z1, z2]</code>。默认z1是0，z2是1。不同api可能不同。之后窗口坐标传入光栅化阶段。
 屏幕映射见图2.7示意。</p>
 <p>接下来介绍和像素有关的整型和浮点数值运算。给一行笛卡尔坐标系内的像素，最左像素的左边的x坐标在浮点数表示下是0.0。opengl一直用这种表示，dx10也沿用了。像素的中心点是0.5位置。所以从0到9这10个像素的覆盖范围是<code>[0.0, 10.0)</code>。转换方式如下：</p>
 <p>\[ d = floor(c) \]

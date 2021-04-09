@@ -3,7 +3,7 @@
     <head>
         <!-- Book generated using mdBook -->
         <meta charset="UTF-8">
-        <title>图形处理单元 - 实时渲染第4版</title>
+        <title>像素处理 - 实时渲染第4版</title>
         
         
 
@@ -98,7 +98,7 @@
 
         <nav id="sidebar" class="sidebar" aria-label="Table of contents">
             <div class="sidebar-scrollbox">
-                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="../chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="../chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.3.html"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.4.html"><strong aria-hidden="true">2.4.</strong> 光栅化</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.5.html"><strong aria-hidden="true">2.5.</strong> 像素处理</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_3/chapter_3.html" class="active"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
+                <ol class="chapter"><li class="chapter-item expanded affix "><a href="../chapter_0.html">译序</a></li><li class="chapter-item expanded affix "><li class="part-title">正文</li><li class="chapter-item expanded "><a href="../chapter_1.html"><strong aria-hidden="true">1.</strong> 前言</a></li><li class="chapter-item expanded "><a href="../chapter_2/chapter_2.html"><strong aria-hidden="true">2.</strong> 渲染流水线</a></li><li><ol class="section"><li class="chapter-item expanded "><a href="../chapter_2/2.1.html"><strong aria-hidden="true">2.1.</strong> 架构</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.2.html"><strong aria-hidden="true">2.2.</strong> 应用程序阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.3.html"><strong aria-hidden="true">2.3.</strong> 几何阶段</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.4.html"><strong aria-hidden="true">2.4.</strong> 光栅化</a></li><li class="chapter-item expanded "><a href="../chapter_2/2.5.html" class="active"><strong aria-hidden="true">2.5.</strong> 像素处理</a></li></ol></li><li class="chapter-item expanded "><a href="../chapter_3/chapter_3.html"><strong aria-hidden="true">3.</strong> 图形处理单元</a></li></ol>
             </div>
             <div id="sidebar-resize-handle" class="sidebar-resize-handle"></div>
         </nav>
@@ -166,18 +166,41 @@
 
                 <div id="content" class="content">
                     <main>
-                        <h1 id="图形处理单元"><a class="header" href="#图形处理单元">图形处理单元</a></h1>
+                        <h2 id="25-像素处理"><a class="header" href="#25-像素处理">2.5 像素处理</a></h2>
+<p>目前所有判定为三角形或其他图元内部的像素已经在之前的阶段确定。像素处理阶段分为<em>像素着色</em>和<em>混合</em>，见图2.8。像素处理阶段是会对他们进行逐像素或逐采样地计算和操作。</p>
+<h3 id="251-像素着色"><a class="header" href="#251-像素着色">2.5.1 像素着色</a></h3>
+<p>这里负责所有逐像素的着色计算，其数据来自之前阶段的插值结果，其结果是一或多个颜色值。
+前面的三角形建立和三角形遍历一般是固定的硬件核来实现，本阶段则是运行在可编程的gpu核上。程序员提供一段称作像素着色器的程序（或称片段着色器），可执行任何计算。
+此阶段可以搞很多事情，其中比较重要的一个是<em>贴图</em>。贴图在<a href="">c6</a>会详细介绍。简单来说，贴图是把一或多张图粘到物体上的一个操作，其目的可以有很多种。图2.9展示一种简单的贴图方法。图片可以是1，2，3维，其中2维图片最常见。最终每个片段的颜色送入下一个子阶段处理。</p>
+<blockquote>
+<p>图2.9：展示把恐龙皮贴到恐龙模型上</p>
+</blockquote>
+<h3 id="252-混合"><a class="header" href="#252-混合">2.5.2 混合</a></h3>
+<p>每个像素的信息存储在<em>颜色缓冲</em>里，每个颜色是红绿蓝通道。混合阶段的功能是把当前片段着色产生的像素与之前在颜色缓冲里的像素结合产生新的颜色。这个阶段又被叫做ROP，即栅格运算，或渲染输出单元。与像素着色阶段不同，本阶段不是完全可编程的，但是是高度可配置的，也可以实现很多种效果。</p>
+<p>本阶段还负责解决可见性问题，意思是说，渲染结束的时候，颜色缓冲里得是最后实际看到的像素信息。几乎在所有硬件里，实现这个效果都使用了一个叫z缓冲的技术（或称深度缓冲）。
+z缓冲与颜色缓冲一样长，不过每个地方存的是一个当前最近的像素的深度值。每次有一个像素生成出来，都要用它的深度值与在z缓冲里对应的那个深度值进行比较。如果新的深度值更小，说明它更靠近摄像机，所以此新的像素颜色信息和其深度都被采用，覆盖原来的对应位置的信息；如果新的深度值更大，则对应位置的数据保留不变，新值被丢弃。这个算法很简单，有<code>O(n)</code>的复杂度（n是需要画的图元数），并且对所有种类的图元渲染都是生效的。还有，这个算法对渲染顺序是不关心的。但是z缓冲里只存了一个深度值，导致它不能处理半透明的物体。所以半透明物体必须在所有不透明物体渲染完后再渲染，而且半透明物体需要按从远往近的顺序来渲染，或者使用另外的顺序无关的算法（<a href="">5.5</a>）。简单的z缓冲的主要缺陷就是不能处理半透明问题。</p>
+<p>之前提到颜色缓冲存颜色，z缓冲存深度值。实际还有另一个通道和缓存也可以用来过滤和捕获（译注：啥意思）片段信息。<em>alpha通道</em>与颜色缓冲相关，存储了像素的透明度（<a href="">5.5</a>）。
+在老的api中，alpha通道使用alpha测试的功能来决定像素是否需要丢弃。现在这个操作可以在像素着色器里面进行。这类测试的目的是保证完全透明的像素不会影响z缓冲功能（<a href="">6.6</a>）。</p>
+<p>模板缓冲是一种用来记录已渲染的图元位置的离屏缓冲。一般每像素包含8个bit信息。图元可以用不同的方法渲染到模板缓冲里，然后此缓冲的数据可以用来控制渲染到颜色缓冲和z缓冲的过程。例如，假设已渲染一个圆形范围到模板缓冲。之后可以用它来使只有在圆形范围内的像素渲染到颜色缓冲里。模板缓冲很强大，可以实现很多特殊效果。
+最后的一个步骤叫做光栅操作，或者融合操作。可以把已经在颜色缓冲里的像素的颜色和新产生的像素的颜色进行混合。可以实现例如透明或颜色叠加的效果。之前提到过，此阶段是可配置的，但是不是完全可编程的。但是也有的api支持光栅顺序视图（译注：？），或者称做像素着色顺序，实现混合功能的可编程。</p>
+<p>所谓<em>帧缓冲</em>一般包含上述所有缓冲。</p>
+<p>最后可见的像素显示到屏幕上。屏幕显示的是颜色缓冲的内容。为了防止眼睛看到正在把数据传输到屏幕的过程，可使用<em>双缓冲</em>的技术。意思就是渲染发生在离屏的情况，这个目标叫<em>后缓冲</em>。渲染完成的时候，直接交换后缓冲和<em>前缓冲</em>来把内容搞到屏幕上。这个交换的时间点是<em>垂直同步</em>发生的时候，这个时候做这个交换是安全可靠的。</p>
+<p>关于不同的缓冲和策略，参见<a href="">5.4.2</a>，<a href="">23.6</a>，<a href="">23.7</a>。</p>
 
                     </main>
 
                     <nav class="nav-wrapper" aria-label="Page navigation">
                         <!-- Mobile navigation buttons -->
                         
-                            <a rel="prev" href="../chapter_2/2.5.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                            <a rel="prev" href="../chapter_2/2.4.html" class="mobile-nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                                 <i class="fa fa-angle-left"></i>
                             </a>
                         
 
+                        
+                            <a rel="next" href="../chapter_3/chapter_3.html" class="mobile-nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                                <i class="fa fa-angle-right"></i>
+                            </a>
                         
 
                         <div style="clear: both"></div>
@@ -187,11 +210,15 @@
 
             <nav class="nav-wide-wrapper" aria-label="Page navigation">
                 
-                    <a rel="prev" href="../chapter_2/2.5.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
+                    <a rel="prev" href="../chapter_2/2.4.html" class="nav-chapters previous" title="Previous chapter" aria-label="Previous chapter" aria-keyshortcuts="Left">
                         <i class="fa fa-angle-left"></i>
                     </a>
                 
 
+                
+                    <a rel="next" href="../chapter_3/chapter_3.html" class="nav-chapters next" title="Next chapter" aria-label="Next chapter" aria-keyshortcuts="Right">
+                        <i class="fa fa-angle-right"></i>
+                    </a>
                 
             </nav>
 
